@@ -1,12 +1,4 @@
-# Camunda BPM EE Docker image
-
-## Folder Structure
-Folder/File | Description
----|---
-./camunda-bpm-wildfly-ee | Docker image for Camunda BPM EE Wildfly distro primarily for accessing Tasklist and Cockpit
-./postgres-camunda-bpm-ee | Docker image for PostreSQL incl. Camunda tables
-docker-compose.yml | Docker composition that wires all services together
-
+# Camunda BPM Docker image
 ## Running
 
 - Build and run all Docker images using `docker-compose up -d --build`
