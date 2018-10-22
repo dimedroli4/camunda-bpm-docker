@@ -1,0 +1,36 @@
+version: '2'
+
+services:
+  camunda:
+    image: dimedroli4/camunda
+    ports:
+    - "8080:8080"
+    - "9990:9990"
+    depends_on:
+    - camundadb
+    networks:
+    - camunda
+    environment:
+    - DB_DRIVER=org.postgresql.Driver
+    - WAIT_FOR=camundadb:5432
+    - DB_URL=jdbc:postgresql://camundadb:5432/camunda
+    - DB_USERNAME=camunda
+    - DB_PASSWORD=camunda
+    - DB_CONN_MAXACTIVE=20
+    - DB_CONN_MINIDLE=5
+  camundadb:
+    restart: always
+    image: dimedroli4/camunda_db
+    ports:
+    - "5432:5432"
+    environment:
+    - POSTGRES_DB=camunda
+    - POSTGRES_USER=camunda
+    - POSTGRES_PASSWORD=camunda
+    volumes:
+    - $PWD/:/var/lib/postgresql
+    networks:
+    - camunda
+
+networks:
+  camunda:
