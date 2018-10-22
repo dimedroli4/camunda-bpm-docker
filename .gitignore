@@ -63,3 +63,4 @@ fabric.properties
 
 /.idea/
 /camunda-bpm-docker.iml
+/data/

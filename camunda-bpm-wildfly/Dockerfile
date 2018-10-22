@@ -3,20 +3,21 @@ FROM camunda/camunda-bpm-platform:wildfly11
 
 ENV LIB_DIR /camunda/lib
 ENV NEXUS https://app.camunda.com/nexus/service/local/artifact/maven/redirect
-ENV VERSION 7.9.0
+ENV CAMUNDA_VERSION 7.9.0
 
 ARG MANAGEMENT_USERNAME
 ARG MANAGEMENT_PASSWORD
 
-# remove H2
+# remove H2 and examples
 RUN if [ "$DB_DRIVER" != "h2" ]; then rm /camunda/standalone/deployments/camunda-h2-webapp-${CAMUNDA_VERSION}.war; fi
+RUN rm /camunda/standalone/deployments/camunda-example-invoice-${CAMUNDA_VERSION}.war
 
 # re-add database drivers
 USER root
 RUN apk add --no-cache curl
 USER camunda
 COPY scripts/download-database-drivers.sh /usr/local/bin/
-RUN /usr/local/bin/download-database-drivers.sh "${NEXUS}?r=public&g=org.camunda.bpm&a=camunda-database-settings&v=${VERSION}&p=pom"
+RUN /usr/local/bin/download-database-drivers.sh "${NEXUS}?r=public&g=org.camunda.bpm&a=camunda-database-settings&v=${CAMUNDA_VERSION}&p=pom"
 
 # disable automatic DB schema creation/updates
 RUN sed -i 's#<property name="isAutoSchemaUpdate">true</property>#<property name="isAutoSchemaUpdate">false</property>#' /camunda/standalone/configuration/standalone.xml
